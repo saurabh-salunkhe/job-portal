@@ -43,24 +43,39 @@ const Sidebar = ({ onClose, isMobile }) => {
       </div> */}
 
       {/* Performance Section */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center mb-4">
-          <h4 className="text-sm font-semibold text-gray-900">Your Performance</h4>
-          <div className="ml-2 w-4 h-4 bg-gray-300 rounded-full flex items-center justify-center cursor-help">
-            <span className="text-gray-600 text-xs">i</span>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
+      <div className="p-6 bg-white rounded-2xl">
+        <div className="bg-[#EEF4FF] rounded-2xl shadow-sm p-4">
+          {/* Header */}
+          <div className="flex items-center mb-4">
+            <h4 className="text-sm font-semibold text-gray-900">Your Performance</h4>
+            <div className="ml-2 w-4 h-4 bg-gray-200 rounded-full flex items-center justify-center cursor-help">
+              <span className="text-gray-600 text-xs">i</span>
+            </div>
+         </div>
+
+          {/* Stats Grid */}
+        <div className="grid grid-cols-2 divide-x divide-gray-200 text-center ">
+          {/* Connections Today */}
+          <div>
             <p className="text-xs text-gray-600 mb-1">Connections Today</p>
-            <p className="text-2xl font-bold text-blue-600">28</p>
-            <p className="text-xs text-gray-400">↗</p>
+            <div className="relative inline-block">
+              <p className="text-2xl font-bold text-blue-600">28</p>
+              {/* Red dot */}
+              <span className="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+            </div>
+            <p className="text-xs text-gray-400">{">"}</p>
           </div>
-          <div className="text-center">
+
+            {/* Recruitment Offers */}
+          <div>
             <p className="text-xs text-gray-600 mb-1">Recruitment Offers</p>
-            <p className="text-2xl font-bold text-blue-600">129</p>
-            <p className="text-xs text-gray-400">↗</p>
+            <div className="relative inline-block">
+              <p className="text-2xl font-bold text-blue-600">129</p>
+              {/* Red dot */}
+              <span className="absolute -top-1 -right-3 w-2 h-2 bg-red-500 rounded-full"></span>
+            </div>
+              <p className="text-xs text-gray-400">{">"}</p>
+            </div>
           </div>
         </div>
       </div>

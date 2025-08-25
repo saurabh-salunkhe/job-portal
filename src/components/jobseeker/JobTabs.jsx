@@ -1,14 +1,13 @@
 'use client'
-
 import React, { useState } from 'react';
 
 const JobTabs = () => {
   const [activeTab, setActiveTab] = useState('recommended');
 
   const tabs = [
-    { id: 'recommended', label: 'Recommended', active: true },
-    { id: 'preferred', label: 'preferred', active: false },
-    { id: 'you-might-like', label: 'You might like', active: false }
+    { id: 'recommended', label: 'Recommended' },
+    { id: 'preferred', label: 'Preferred' },
+    { id: 'you-might-like', label: 'You might like' }
   ];
 
   return (
