@@ -129,7 +129,7 @@ export default function VerifyLoginOtpPage() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded "
+          className="w-full bg-blue-600 text-white py-2 rounded flex justify-center items-center"
           disabled={isVerifying || otp.length !== 6}
         >
           {isVerifying ? (

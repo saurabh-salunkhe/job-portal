@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { completeProfile } from '@/lib/api';
+import { completeProfile, uploadResume } from '@/lib/api'; // 👈 add resume API
 
 export default function CompleteProfilePage() {
   const [formData, setFormData] = useState({
@@ -14,6 +14,10 @@ export default function CompleteProfilePage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showResumeUpload, setShowResumeUpload] = useState(false); // 👈 toggle for resume upload
+  const [resume, setResume] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -69,7 +73,9 @@ export default function CompleteProfilePage() {
         localStorage.removeItem('phoneForVerification');
         localStorage.removeItem('sessionId');
         localStorage.removeItem('sessionType');
-        router.push('/jobseeker/auth/email-verification'); 
+
+        // 👇 Instead of redirecting directly, show resume upload
+        setShowResumeUpload(true);
       } else {
         const msg =
           res.data.details && typeof res.data.details === 'object'
@@ -84,10 +90,70 @@ export default function CompleteProfilePage() {
     }
   };
 
+  const handleResumeUpload = async (e) => {
+    e.preventDefault();
+    if (!resume) {
+      setError('Please select a resume file.');
+      return;
+    }
+    setUploading(true);
+    setError('');
+
+    try {
+      const userId = localStorage.getItem('userId');
+      const formData = new FormData();
+      formData.append('file', resume);
+      formData.append('user_id', userId);
+
+      const res = await uploadResume(formData); // 👈 your API integration
+      if (res.data.resume_id) {
+        router.push('/jobseeker/auth/email-verification');
+      } else {
+        setError(res.data.message || 'Failed to upload resume.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error uploading resume.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  if (showResumeUpload) {
+    return (
+      <form
+        onSubmit={handleResumeUpload}
+        className="p-8 rounded-md w-full max-w-md"
+      >
+        <h2 className="text-2xl font-semibold mb-6 text-center">Upload Resume</h2>
+
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={(e) => setResume(e.target.files[0])}
+          className="w-full mb-4"
+        />
+
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          disabled={uploading}
+        >
+          {uploading ? (
+            <div className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5 mx-auto"></div>
+          ) : (
+            'Upload & Continue'
+          )}
+        </button>
+      </form>
+    );
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
-      className=" p-8 rounded-md w-full max-w-md "
+      className="p-8 rounded-md w-full max-w-md"
     >
       <h2 className="text-2xl font-semibold mb-6 text-center">Complete Profile</h2>
 
@@ -141,7 +207,7 @@ export default function CompleteProfilePage() {
       >
         {isLoading ? (
           <div className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5 mx-auto"></div>
-        ) : ( 
+        ) : (
           'Submit'
         )}
       </button>

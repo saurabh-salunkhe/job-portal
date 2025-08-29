@@ -137,9 +137,9 @@ class ApiService {
     }
   }
 
-  async getUserApplications(userId) {
+  async getUserApplications(user_id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/applications/user/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/applications/user/${user_id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -156,9 +156,9 @@ class ApiService {
     }
   }
 
-  async getJobApplications(jobPostId) {
+  async getJobApplications(job_post_id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/applications/job/${jobPostId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/applications/job/${job_post_id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -171,6 +171,48 @@ class ApiService {
       return await response.json();
     } catch (error) {
       console.error("Error fetching job applications:", error);
+      throw error;
+    }
+  }
+  async matchApplicants(job_post_id) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/jobs/match-applicants`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ job_post_id }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to match applicants");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error matching applicants:", error);
+      throw error;
+    }
+  }
+
+  // GET: Fetch top applicants for a given job_post_id
+  async getTopApplicants(job_post_id) {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/jobs/${job_post_id}/top-applicants`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to fetch top applicants");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching top applicants:", error);
       throw error;
     }
   }

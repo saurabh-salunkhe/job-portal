@@ -11,6 +11,13 @@ export const verifyPhone = (phone) =>
 export const completeProfile = (data) =>
   axios.post(`${API_BASE}/api/auth/complete-profile`, data);
 
+export const uploadResume = (formData) =>
+  axios.post(`${API_BASE}/api/upload`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
 // Login: Send OTP to phone
 export const login = (phone) =>
   axios.post(`${API_BASE}/api/auth/login`, { phone });

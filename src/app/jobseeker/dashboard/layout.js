@@ -42,23 +42,26 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="h-screen flex flex-col overflow-hidden"   // 🔹 full height, no scroll
       style={{
         backgroundImage: `
           radial-gradient(circle at top left, #93C5FD 0%, transparent 55%),
           radial-gradient(circle at bottom right, #93C5FD 0%, transparent 55%)
         `,
-        backgroundColor: '#F9FAFB', // fallback gray background
+        backgroundColor: '#F9FAFB',
       }}
     >
       {/* Header */}
-      <Header
-        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        sidebarOpen={sidebarOpen}
-        isMobile={isMobile}
-      />
+      <div className="h-16 flex-shrink-0">
+        <Header
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+          sidebarOpen={sidebarOpen}
+          isMobile={isMobile}
+        />
+      </div>
 
-      <div className="flex relative flex-1">
+      {/* Body */}
+      <div className="flex flex-1 relative overflow-hidden">
         {/* Sidebar */}
         <div
           className={`
@@ -81,7 +84,7 @@ export default function DashboardLayout({ children }) {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 min-h-screen transition-all duration-300 ease-in-out p-4">
+        <main className="flex-1 overflow-hidden p-4">
           {children}
         </main>
       </div>

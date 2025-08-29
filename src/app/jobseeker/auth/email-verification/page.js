@@ -115,7 +115,7 @@ export default function EmailVerificationPage() {
       {/* Send Verification Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition  text-sm font-medium"
+        className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition  text-sm font-medium flex justify-center items-center"
         disabled={isLoading || !email.trim()}
       >
         {isLoading ? (

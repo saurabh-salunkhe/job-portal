@@ -9,10 +9,9 @@ import apiService from '@/services/apiService';
 
 export default function DashboardPage() {
   const [selectedJob, setSelectedJob] = useState(null);
-  const [jobs, setJobs] = useState([]);           // 🔹 store all/filtered jobs
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all jobs initially
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -24,16 +23,10 @@ export default function DashboardPage() {
         setLoading(false);
       }
     };
-
     fetchJobs();
   }, []);
 
-  // 🔹 Callback from FilterBar when filters change
-  const handleJobsFetched = (filteredJobs) => {
-    setJobs(filteredJobs);
-  };
-
-  // 🔹 Fetch full job details by ID
+  const handleJobsFetched = (filteredJobs) => setJobs(filteredJobs);
   const handleSelectJob = async (jobId) => {
     try {
       const jobData = await apiService.getJobPostById(jobId);
@@ -44,38 +37,44 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen">
-      {/* 🔹 Full-width FilterBar */}
-      <div>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Top Filter */}
+      <div className="shrink-0">
         <FilterBar onJobsFetched={handleJobsFetched} />
       </div>
 
-      {/* 🔹 Split View Container */}
-      <div className="flex max-w-7xl mx-auto mt-4 h-[calc(100vh-120px)] gap-6 bg-transparent">
-        {/* Left: Job Tabs + Job List */}
+      {/* Split layout */}
+      <div className="flex flex-1 gap-6 mt-4 overflow-hidden">
+        {/* Left: Tabs + Jobs */}
         <div
-          className={`transition-all duration-300 overflow-y-auto ${
+          className={`flex flex-col overflow-hidden bg-white shadow-sm rounded-xl transition-all duration-300 ${
             selectedJob ? 'w-2/3' : 'w-full'
-          } bg-white shadow-sm rounded-xl`}
+          }`}
         >
-          <JobTabs />
-          {loading ? (
-            <p className="text-gray-600 text-center mt-8">Loading jobs...</p>
-          ) : (
-            <JobsList jobs={jobs} onSelectJob={handleSelectJob} />
-          )}
+          <div className="shrink-0">
+            <JobTabs />
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {loading ? (
+              <p className="text-gray-600 text-center mt-8">Loading jobs...</p>
+            ) : (
+              <JobsList jobs={jobs} onSelectJob={handleSelectJob} />
+            )}
+          </div>
         </div>
 
-        {/* Right: Sidebar (only visible if job is selected) */}
+        {/* Right: Sidebar */}
         {selectedJob && (
-          <div className="w-1/3 h-full overflow-y-auto bg-gray-50 shadow-sm rounded-xl">
-            <JobDetailsSidebar
-              job={selectedJob}
-              onClose={() => setSelectedJob(null)}
-            />
+          <div className="w-1/3 flex flex-col bg-gray-50 shadow-sm rounded-xl overflow-hidden">
+            <div className="flex-1 overflow-y-auto">
+              <JobDetailsSidebar
+                job={selectedJob}
+                onClose={() => setSelectedJob(null)}
+              />
+            </div>
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

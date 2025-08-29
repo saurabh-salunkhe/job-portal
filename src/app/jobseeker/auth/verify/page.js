@@ -187,7 +187,7 @@ export default function VerifyOTP() {
         )}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded mb-2 "
+          className="w-full bg-blue-600 text-white py-2 rounded mb-2 flex justify-center items-center"
           disabled={isLoading || otp.trim().length !== 6}
         >
           {isLoading ? (
